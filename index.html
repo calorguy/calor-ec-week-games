@@ -1,23 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ethics & Compliance Games</title>
 </head>
+
 <body>
-  
-  </div>
+
+  <p>There are no games available today. Check back tomorrow!</p>
 
   <script>
     // Load the game associated with the current day of the week (Monday to Friday)
     var today = new Date();
     var dayOfWeek = today.getDay();
 
-    document.addEventListener('DOMContentLoaded', function() {
+    window.onload = function () {
+      if (dayOfWeek === 1) {
         window.location.href = "./EC_Week_Connections.html";
-    });
+      }
+      else if (dayOfWeek === 2) {
+        window.location.href = "./EC_Week_Calor_Ethics_Millionaire.html";
+      }
+      else if (dayOfWeek === 4) {
+        window.location.href = "./EC_Week_real-v-ai-image-challenge.html";
+      }
+    };
 
   </script>
 </body>
+
 </html>
