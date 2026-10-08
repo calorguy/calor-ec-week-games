@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ethics & Compliance Connections</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      text-align: center;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-gap: 10px;
+      margin: 20px 0;
+    }
+
+    .word-tile {
+      background-color: #ffffff;
+      border: 2px solid #ccc;
+      padding: 20px 12px 28px;
+      font-size: 18px;
+      cursor: pointer;
+      user-select: none;
+      min-height: 72px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .word-tile:hover {
+      background-color: #f8d7da;
+      border-color: #DF2B2A;
+      border-style: dashed;
+    }
+
+    .word-tile.word-tile.selected:hover {
+      border-style: solid;
+    }
+
+    .word-tile.selected {
+      background-color: #f8d7da;
+      border-color: #dc3545;
+    }
+
+    .group-found {
+      background-color: #d4edda !important;
+      border-color: #28a745 !important;
+    }
+
+    .category-label {
+      position: absolute;
+      bottom: 4px;
+      left: 6px;
+      right: 6px;
+      font-size: 13px;
+      line-height: 1.1;
+      color: #155724;
+      opacity: 0.85;
+      pointer-events: none;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .logo {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .logo svg {
+      max-width: 20%;
+      height: auto;
+    }
+
+    .button-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-top: 30px;
+    }
+
+    .nav-button {
+      padding: 15px 25px;
+      font-size: 16px;
+      background-color: #DF2B2A;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .nav-button:hover {
+      background-color: #b52221;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .button-row button {
+      padding: 10px 16px;
+      font-size: 15px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      background: #fff;
+      cursor: pointer;
+    }
+
+    .button-row button:hover {
+      background: #f0f0f0;
+    }
+  </style>
+</head>
+<body>
+  <div class="logo">
+    <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" width="169.152" height="39.529"
+      viewBox="0 0 169.152 39.529"
+      onclick="returnToLanding()"
+      >
+      <title>CAL-H-RGB</title>
+      <g>
+        <path
+          d="M61.1,7.345A11.925,11.925,0,0,0,48.945,19.534,11.926,11.926,0,0,0,61.1,31.723a12.618,12.618,0,0,0,9.664-4.176L67.4,24.18a8.326,8.326,0,0,1-6.3,2.627c-3.973,0-6.767-3.233-6.767-7.273s2.794-7.273,6.767-7.273a7.822,7.822,0,0,1,5.893,2.39l3.536-3.535A12.487,12.487,0,0,0,61.1,7.345m26.264.235H82.448L72.414,31.319h5.32l1.852-4.479h10.64l1.852,4.479H97.4L87.364,7.58Zm72.191.169H148.78v23.57h5.186V12.53h5.185c2.424,0,4.041,1.145,4.041,3.434s-1.617,3.435-4.041,3.435h-2.357V24.18l2.424,2.593c4.176,4.445,5.859,4.815,8.688,4.815a7.9,7.9,0,0,0,1.246-.068V27.076a3.632,3.632,0,0,1-.438.034c-1.616,0-3.031-.741-5.287-3l-.909-.909a7.3,7.3,0,0,0,5.927-7.374c0-5.32-3.907-8.081-8.89-8.081m-53.167,0H101.2v23.57H118.14V26.47H106.388V7.749ZM81.438,22.261l3.468-8.451,3.468,8.451Zm50.473,4.546a6.964,6.964,0,0,1-6.936-7.273,6.944,6.944,0,1,1,13.872,0,6.925,6.925,0,0,1-6.936,7.273m0-19.462a12.07,12.07,0,0,0-12.256,12.189,12.256,12.256,0,0,0,24.512,0A12.07,12.07,0,0,0,131.911,7.345" />
+        <path
+          d="M39.611,19.724A19.8,19.8,0,0,0,29.117,2.246V8.132a14.851,14.851,0,1,1-18.623.056V2.246A19.8,19.8,0,1,0,39.611,19.724Zm-8.2,0a11.52,11.52,0,0,0-4.339-9.014,2.905,2.905,0,0,1-1.2-2.367V.871A19.682,19.682,0,0,0,21.5,0V8.291h0v2.4a3.678,3.678,0,0,0,1.541,3.3,6.6,6.6,0,1,1-6.474,0A3.649,3.649,0,0,0,18.184,10.7V0a19.681,19.681,0,0,0-4.365.844v7.5A2.93,2.93,0,0,1,12.6,10.721a11.56,11.56,0,1,0,18.806,9Z"
+          fill="#ec1e26" />
+      </g>
+    </svg>
+  </div>
+
+  <div id="landing" class="container">
+    <h1>Ethics & Compliance Connections</h1>
+    <div class="button-grid">
+      <button class="nav-button" onclick="loadGame(0)">Monday</button>
+      <button class="nav-button" onclick="loadGame(1)">Tuesday</button>
+      <button class="nav-button" onclick="loadGame(2)">Wednesday</button>
+      <button class="nav-button" onclick="loadGame(3)">Thursday</button>
+      <button class="nav-button" onclick="loadGame(4)">Friday</button>
+      <button class="nav-button" onclick="loadGame('challenge')">Challenge Mode</button>
+    </div>
+  </div>
+
+  <div id="game" class="container hidden">
+    <h1 id="page-title">🧩 Connections Game 🧩</h1>
+    <h2 id="game-title"></h2>
+    <div id="instructions">
+      <p>Create four groups of four! > Select four words that you think form a group, click "Submit" to check, and repeat until all groups are found.</p>
+    </div>
+    <div id="grid" class="grid"></div>
+    <div class="button-row">
+      <!-- <button onclick="returnToLanding()">🏠 Home</button> -->
+      <button id="submit" style="margin-left: 10px;">✅ Submit</button>
+      <button id="new-game" style="margin-left: 10px;">▶️ New Game</button>
+    </div><br>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    const simpleGames = [
+      {
+        groups: [
+          { category: "Transparency", words: ["Open", "Honest", "Accessible", "Company Operations"] },
+          { category: "Ethics & Compliance", words: ["Conduct", "Values", "Culture", "Regulations"] },
+          { category: "Misconduct", words: ["Fraud", "Theft", "Harrassment", "Substance Abuse"] },
+          { category: "Speak Up", words: ["Whistleblower", "Anonymous", "Portal", "Confidential"] }
+        ]
+      },
+      {
+        groups: [
+          { category: "Policies", words: ["Conflict of Interests", "Anti-Money Laundering", "Third Party Due Diligence", "Speak Up"] },
+          { category: "Compliance Register", words: ["Gifting", "Third Party Compliance", "Trade Conference Attendance", "Charitable Contribution"] },
+          { category: "E-Learning", words: ["Anti-Bribery & Corruption", "Competition Law", "Privacy", "Code of Conduct"] },
+          { category: "Third Party Roles", words: ["Vendor", "Employee", "Contractor", "Partner"] }
+        ]
+      },
+      {
+        groups: [
+          { category: "Anti-Corruption", words: ["Whistleblowing", "Foreign Corrupt Practices Act", "Transparency", "Accountability"] },
+          { category: "Privacy", words: ["Data Retention", "Data Breach", "Personally Identifiable Information", "Personal Data"] },
+          { category: "Competition Law", words: ["Collusion", "Price Fixing", "Dominant Position", "Information Sharing"] },
+          { category: "Fraud", words: ["Deceptive Practices", "Financial Misstatements", "Asset Missappropriation", "Fraudulent Activities"] }
+        ]
+      },
+      {
+        groups: [
+          { category: "Charitable Contributions", words: ["Donation", "Sponsorship", "Company Values Alignment", "Registered Nonprofit"] },
+          { category: "Corruption Red Flags", words: ["Bribe", "Gift", "Kickback", "Incentive"] },
+          { category: "Anti-Money Laundering", words: ["Financial Crime", "Illegal Proceeds", "Unusual Monetary Transfers", "Bank Secrecy Act"] },
+          { category: "Dawn Raid", words: ["Warrant", "Regulatory Authority", "Unannounced", "Inspection"] }
+        ]
+      },
+      {
+        groups: [
+          //{ category: "Third Party Due Diligence", words: ["Vendors", "Background Check", "Compliance Risk", "Reputation"] },
+          //{ category: "Conflict of Interest", words: ["Disclosure", "Personal Interest", "Company Interest", "Related Parties"] },
+          { category: "Trade Associations", words: ["Knowledge Sharing", "Industry Advocacy", "Agenda", "Conferences"] },
+          { category: "Gifts & Hospitality", words: ["Nominal Value", "Appropriate Time", "Legitimate Business Purpose", "Given Openly"] },
+          { category: "Principles of GDPR", words: ["Purpose Limitation", "Accuracy", "Integrity", "Confidentiality"] },
+          { category: "Conflict of Interest", words: ["Nepotism", "Self-Dealing", "Insider Trading", "Personal Relationships"] }
+        ]
+      }
+    ];
+
+    let selectedWords = [];
+    let foundCategories = new Set();
+    let maxMistakes = 3;
+    let mistakes = 0;
+    let currentMode = 'day';
+    let currentDayIndex = 0;
+    let currentGroups = [];
+    let currentAnswers = [];
+    let wordCategoryMap = new Map();
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
+    function getCSTTimestamp() {
+      return new Date().toLocaleString(navigator.language, {
+        timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        hour12: Intl.DateTimeFormat().resolvedOptions().hour12,
+        hour: 'numeric',
+        minute: '2-digit',
+        second: '2-digit'
+      });
+    }
+
+    function returnToLanding() {
+      document.getElementById("game").classList.add("hidden");
+      document.getElementById("landing").classList.remove("hidden");
+    }
+
+    function loadGame(index) {
+      const titles = ["Monday Puzzle", "Tuesday Puzzle", "Wednesday Puzzle", "Thursday Puzzle", "Friday Puzzle", "Challenge Mode"];
+      const title = index === 'challenge' ? titles[5] : titles[index];
+      document.getElementById("game-title").textContent = title;
+
+      document.getElementById("landing").classList.add("hidden");
+      document.getElementById("game").classList.remove("hidden");
+
+      if (index === 'challenge') {
+        currentMode = 'challenge';
+        startChallengeGame();
+      } else {
+        currentMode = 'day';
+        currentDayIndex = index;
+        startSimpleGame(simpleGames[currentDayIndex]);
+      }
+    }
+
+    function resetState() {
+      document.getElementById("result").textContent = "";
+      selectedWords = [];
+      foundCategories = new Set();
+      mistakes = 0;
+      wordCategoryMap = new Map();
+    }
+
+    function buildGridFromGroups(groups) {
+      const grid = document.getElementById("grid");
+      grid.innerHTML = "";
+
+      currentGroups = groups.map(g => ({ category: g.category, words: [...g.words] }));
+      currentAnswers = currentGroups.map(g => [...g.words]);
+      wordCategoryMap = new Map();
+      currentGroups.forEach(g => g.words.forEach(w => wordCategoryMap.set(w, g.category)));
+      currentGroups.forEach(g => shuffle(g.words));
+
+      let allWords = currentGroups.flatMap(g => g.words);
+      shuffle(allWords);
+
+      allWords.forEach(word => {
+        const div = document.createElement("div");
+        div.classList.add("word-tile");
+        div.textContent = word;
+        div.onclick = () => toggleSelect(div);
+        grid.appendChild(div);
+      });
+    }
+
+    function startSimpleGame(puzzle) {
+      resetState();
+      buildGridFromGroups(puzzle.groups);
+    }
+
+    function startChallengeGame() {
+      resetState();
+      const allGroups = simpleGames.flatMap(game => game.groups);
+      shuffle(allGroups);
+      const chosenGroups = allGroups.slice(0, 4);
+      buildGridFromGroups(chosenGroups);
+    }
+
+    function toggleSelect(tile) {
+      const word = tile.textContent;
+      if (tile.classList.contains("selected")) {
+        tile.classList.remove("selected");
+        selectedWords = selectedWords.filter(w => w !== word);
+      } else {
+        if (selectedWords.length >= 4) return;
+        tile.classList.add("selected");
+        selectedWords.push(word);
+      }
+    }
+
+    function addCategoryLabel(tile, category) {
+      if (tile.querySelector('.category-label')) return;
+      const label = document.createElement('div');
+      label.className = 'category-label';
+      label.textContent = category;
+      tile.appendChild(label);
+    }
+
+    document.getElementById("new-game").onclick = () => {
+      if (currentMode === 'challenge') {
+        startChallengeGame();
+      } else {
+        startSimpleGame(simpleGames[currentDayIndex]);
+      }
+    };
+
+    const groupColors = [
+      { bg: "#d4edda", border: "#28a745", text: "#155724" }, // green
+      { bg: "#fff3cd", border: "#ffca2c", text: "#664d03" }, // yellow
+      { bg: "#cfe2ff", border: "#0d6efd", text: "#052c65" }, // blue
+      { bg: "#f8d7da", border: "#dc3545", text: "#58151c" }  // red/purple
+    ];
+
+    let categoryColorMap = new Map();
+
+    function addCategoryLabel(tile, category, colorIndex) {
+      if (tile.querySelector('.category-label')) return;
+      const label = document.createElement('div');
+      label.className = 'category-label';
+      label.textContent = category;
+      label.style.color = groupColors[colorIndex].text;
+      tile.appendChild(label);
+    }
+
+    document.getElementById("submit").onclick = () => {
+      if (selectedWords.length !== 4) {
+        alert("Select exactly 4 words.");
+        return;
+      }
+
+      let matchedGroup = null;
+      for (const groupWords of currentAnswers) {
+        if (groupWords.every(w => selectedWords.includes(w))) {
+          matchedGroup = groupWords;
+          break;
+        }
+      }
+
+      if (matchedGroup) {
+        const category = wordCategoryMap.get(matchedGroup[0]);
+        if (!foundCategories.has(category)) {
+          const colorIndex = foundCategories.size % groupColors.length;
+          categoryColorMap.set(category, colorIndex);
+
+          document.querySelectorAll(".word-tile").forEach(tile => {
+            if (selectedWords.includes(tile.textContent)) {
+              tile.style.backgroundColor = groupColors[colorIndex].bg;
+              tile.style.borderColor = groupColors[colorIndex].border;
+              tile.onclick = null;
+              addCategoryLabel(tile, category, colorIndex);
+            }
+          });
+          foundCategories.add(category);
+          document.getElementById("result").textContent = "Correct group!";
+
+        } else {
+          document.getElementById("result").textContent = "That group was already found.";
+        }
+      } else {
+        mistakes++;
+        document.getElementById("result").textContent = `Incorrect group. Mistakes: ${mistakes}/${maxMistakes}`;
+      }
+
+      selectedWords = [];
+      document.querySelectorAll(".word-tile.selected").forEach(tile => tile.classList.remove("selected"));
+
+      if (foundCategories.size === 4) {
+        document.getElementById("result").textContent = `You solved the puzzle at ${getCSTTimestamp()}! 🎉`;
+        // Requesting the user to submit their result after finding a category
+        setTimeout(function () {
+          let person = prompt(`🎉 You solved the puzzle! Please enter your name for the submission.`);
+          if (person != null) {
+            let response = submitResult(person, Array.from(foundCategories).join(", ") );
+            alert("Your result was submitted.");
+          }
+        }, 500);
+      } else if (mistakes >= maxMistakes) {
+        document.getElementById("result").textContent = `Game over. Try again! 😢`;
+      }
+    };
+
+    function submitResult(name, category) {
+      console.log("function: submitResult invoked");
+      // Define the URL to which you want to send the POST request
+      const url = 'https://default7b81ccc5ba354bf8854f49f9c02d3f.b1.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/05/workflows/647072a10fb5441d9c954b3ba73e18c8/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=FhNZUqtI7aUErCTBiI3vjWNOlUMeZTDdBjiY4QE5KQg';
+
+      // Define the data you want to send in the POST request
+      const data = {
+        name: name,
+        category: category,
+        game: "Connections Puzzle"
+      };
+
+      // Convert the data to a JSON string
+      const jsonData = JSON.stringify(data);
+
+      // Set the headers for the request
+      const headers = {
+        'Content-Type': 'application/json'
+      };
+
+      // Make the POST request using fetch
+      fetch(url, {
+        method: 'POST', // Specify the HTTP method
+        headers: headers, // Include the headers
+        body: jsonData // Include the data to be sent
+      })
+        .then(response => {
+          // Check if the request was successful
+          if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+          }
+          return response.text();
+        })
+        .then(data => {
+          // Handle the response data
+          console.log('Success:', data);
+        })
+        .catch(error => {
+          // Handle any errors that occurred during the request
+          console.error('Error:', error);
+        });
+    };
+
+    // Load the game associated with the current day of the week (Monday to Friday)
+    var today = new Date();
+    var dayOfWeek = today.getDay();
+    var dayIndex = Math.min(4, (dayOfWeek + 6) % 7);
+    window.onload = loadGame(dayIndex);
+
+  </script>
+</body>
+</html>

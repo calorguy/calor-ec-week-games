@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calor Ethics Millionaire</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: linear-gradient(135deg, #001b44, #3c1361);
+            color: white;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        .welcome-screen {
+            text-align: center;
+            padding-top: 40px;
+        }
+
+        .logo {
+            max-width: 260px;
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+        }
+
+        .start-btn {
+            background: #e30613;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .start-btn:hover {
+            background: #c40010;
+        }
+
+        .game-area {
+            display: none;
+        }
+
+        .question-box {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 20px;
+        }
+
+        .answer {
+            width: 100%;
+            text-align: left;
+            padding: 15px;
+            margin: 10px 0;
+            background: #0047ab;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .answer:hover {
+            background: #0066ff;
+        }
+
+        .correct {
+            background: green !important;
+        }
+
+        .incorrect {
+            background: red !important;
+        }
+
+        .prize {
+            color: gold;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .score {
+            font-size: 20px;
+            margin-top: 10px;
+        }
+
+        .ladder {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+
+        .current {
+            background: gold;
+            color: black;
+            font-weight: bold;
+            padding: 5px;
+            border-radius: 5px;
+        }
+
+        .restart {
+            background: #e30613;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div id="welcomeScreen" class="welcome-screen">
+
+            <img src="https://cdn.calorgas.ie/-/media/sites/ireland/logos/calor-logo.svg?rev=102456b68ead4843949a973e23260dc9&h=34&w=146&la=en-IE&hash=E7AF732F2BCE705AE993FAF6F186F18B"
+                class="logo" alt="Calor">
+
+            <h1>💰 Ethics Millionaire 💰</h1>
+
+            <h2>Calor Ethics & Compliance Challenge</h2>
+
+            <p>
+                Answer all 10 scenarios and earn as many points as possible.
+            </p>
+
+            <p>
+                Wrong answers do not end the game. They simply earn zero points.
+            </p>
+
+            <br>
+
+            <button class="start-btn" onclick="startGame()">
+                Start Challenge
+            </button>
+
+        </div>
+
+        <div id="gameArea" class="game-area">
+
+            <div style="text-align:center;">
+
+                <h1>💰 Ethics Millionaire 💰</h1>
+
+                <div id="prize" class="prize"></div>
+
+                <div id="score" class="score"></div>
+
+            </div>
+
+            <div class="question-box">
+
+                <h2 id="question"></h2>
+
+                <div id="answers"></div>
+
+            </div>
+
+            <div class="ladder" id="ladder"></div>
+
+        </div>
+
+    </div>
+
+    <script>
+
+        const questions = [
+
+            {
+                question: "You are involved in selecting a supplier for a major contract. One of the bidders is owned by your cousin.",
+                answers: [
+                    "A. Select your cousin's company if they offer a competitive price.",
+                    "B. Keep the relationship private.",
+                    "C. Disclose the relationship and remove yourself from the decision-making process.",
+                    "D. Ask your cousin to lower the price."
+                ],
+                correct: 2
+            },
+
+            {
+                question: "A supplier offers you tickets to a luxury sporting event while contract negotiations are ongoing.",
+                answers: [
+                    "A. Accept the tickets because it helps build relationships.",
+                    "B. Accept and keep it confidential.",
+                    "C. Decline politely and register it in the Compliance Register.",
+                    "D. Accept only if other suppliers are not informed."
+                ],
+                correct: 2
+            },
+
+            {
+                question: "Your manager asks you to delay recording certain expenses.",
+                answers: [
+                    "A. Follow instructions.",
+                    "B. Record accurately and raise concerns if necessary.",
+                    "C. Delay until next quarter.",
+                    "D. Ask a colleague to make the adjustment."
+                ],
+                correct: 1
+            },
+
+            {
+                question: "You accidentally receive confidential information about a competitor.",
+                answers: [
+                    "A. Share it with your team.",
+                    "B. Use it in negotiations.",
+                    "C. Use it freely.",
+                    "D. Notify the appropriate function and do not use it."
+                ],
+                correct: 3
+            },
+
+            {
+                question: "A team member repeatedly interrupts and belittles a colleague.",
+                answers: [
+                    "A. Ignore it.",
+                    "B. Join in.",
+                    "C. Address the behaviour respectfully or report concerns.",
+                    "D. Wait until someone else acts."
+                ],
+                correct: 2
+            },
+
+            {
+                question: "You receive an email requesting customer data from an unknown external address.",
+                answers: [
+                    "A. Send the data immediately.",
+                    "B. Verify the request through approved channels.",
+                    "C. Forward it to others.",
+                    "D. Share only part of the data."
+                ],
+                correct: 1
+            },
+
+            {
+                question: "A competitor's employee offers confidential pricing information.",
+                answers: [
+                    "A. Accept it.",
+                    "B. Accept secretly.",
+                    "C. Refuse and report it.",
+                    "D. Exchange company information."
+                ],
+                correct: 2
+            },
+
+            {
+                question: "You suspect expense report fraud but have no direct proof.",
+                answers: [
+                    "A. Spread rumours.",
+                    "B. Ignore it.",
+                    "C. Report concerns through proper channels.",
+                    "D. Confront publicly."
+                ],
+                correct: 2
+            },
+
+            {
+                question: "A customer asks you to alter the date on a contract.",
+                answers: [
+                    "A. Change the date.",
+                    "B. Keep the original and change it.",
+                    "C. Refuse and report the request.",
+                    "D. Ask a colleague."
+                ],
+                correct: 2
+            },
+
+            {
+                question: "A process saves money but creates unnecessary environmental waste.",
+                answers: [
+                    "A. Continue because it saves money.",
+                    "B. Hide the impact.",
+                    "C. Evaluate responsible alternatives.",
+                    "D. Wait for regulators."
+                ],
+                correct: 2
+            }
+
+        ];
+
+        const prizes = [
+            100,
+            200,
+            300,
+            500,
+            1000,
+            2000,
+            4000,
+            8000,
+            16000,
+            32000
+        ];
+
+        let current = 0;
+        let score = 0;
+
+        function startGame() {
+
+            document.getElementById("welcomeScreen").style.display = "none";
+            document.getElementById("gameArea").style.display = "block";
+
+            loadQuestion();
+
+        }
+
+        function loadQuestion() {
+
+            document.getElementById("question").innerHTML =
+                questions[current].question;
+
+            document.getElementById("prize").innerHTML =
+                "Question Value: " + prizes[current].toLocaleString() + " Points";
+
+            document.getElementById("score").innerHTML =
+                "Current Score: " + score.toLocaleString() + " Points";
+
+            const answersDiv = document.getElementById("answers");
+            answersDiv.innerHTML = "";
+
+            questions[current].answers.forEach((answer, index) => {
+
+                const btn = document.createElement("button");
+
+                btn.className = "answer";
+
+                btn.innerText = answer;
+
+                btn.onclick = () => checkAnswer(index, btn);
+
+                answersDiv.appendChild(btn);
+
+            });
+
+            updateLadder();
+
+        }
+
+        function checkAnswer(index, button) {
+
+            const correct = questions[current].correct;
+            const buttons = document.querySelectorAll(".answer");
+
+            buttons.forEach(btn => btn.disabled = true);
+
+            if (index === correct) {
+
+                button.classList.add("correct");
+                score += prizes[current];
+
+            } else {
+
+                button.classList.add("incorrect");
+                buttons[correct].classList.add("correct");
+            }
+
+            setTimeout(function () {
+
+                current++;
+
+                if (current >= questions.length) {
+                    showResults();
+                } else {
+                    loadQuestion();
+                }
+
+            }, 1500);
+        }
+
+
+        function updateLadder() {
+
+            let html = "<h3>💰 Question Values</h3>";
+
+            for (let i = prizes.length - 1; i >= 0; i--) {
+
+                if (i === current) {
+                    html += `<div class="current">${prizes[i].toLocaleString()}</div>`;
+                } else {
+                    html += `<div>${prizes[i].toLocaleString()}</div>`;
+                }
+            }
+
+            document.getElementById("ladder").innerHTML = html;
+        }
+
+
+        function showResults() {
+
+            let title = "";
+
+            if (score >= 50000) {
+                title = "🏆 Ethics Champion";
+            }
+            else if (score >= 20000) {
+                title = "🥈 Strong Ethical Decision-Maker";
+            }
+            else if (score >= 5000) {
+                title = "🥉 Good Foundation";
+            }
+            else {
+                title = "📚 Additional Ethics Training Recommended";
+            }
+
+            document.querySelector(".question-box").innerHTML = `
+        <h1>${title}</h1>
+        <h2>Challenge Complete!</h2>
+        <h3>Total Score</h3>
+        <h1>${score.toLocaleString()} Points</h1>
+        <button class="restart" onclick="location.reload()">Play Again</button>
+    `;
+
+            document.getElementById("ladder").innerHTML = "";
+            document.getElementById("prize").innerHTML = "";
+            document.getElementById("score").innerHTML = "";
+        }
+    </script>
+</body>
+
+</html>
