@@ -1,10 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ethics & Compliance Connections</title>
   <style>
+    :root {
+      --red: #df2b2a;
+      --red-accent: #b52221;
+    }
     body {
       font-family: Arial, sans-serif;
       background-color: #f4f4f4;
@@ -125,14 +130,95 @@
     .button-row button:hover {
       background: #f0f0f0;
     }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .overlay-content {
+      background-color: white;
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+      color: #333;
+    }
+
+    .overlay-content h1 {
+      margin-top: 0;
+      font-size: 28px;
+      margin-bottom: 30px;
+    }
+
+    #nameForm {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-bottom: 1em;
+    }
+
+    #nameForm label {
+      font-size: 16px;
+      color: #555;
+      font-weight: 600;
+    }
+
+    #nameForm input {
+      padding: 12px;
+      font-size: 16px;
+      border: 2px solid #ddd;
+      border-radius: 5px;
+      transition: border-color 0.3s;
+    }
+
+    #nameForm input:focus {
+      outline: none;
+      border-color: var(--red);
+      box-shadow: 0 0 5px var(--red-accent);
+    }
+
+    #nameForm button {
+      padding: 12px 20px;
+      font-size: 16px;
+      background-color: var(--red);
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+
+    #nameForm button:hover {
+      background-color: var(--red-accent);
+    }
+
+    #nameForm button:active {
+      transform: scale(0.98);
+    }
+
+    /* Hide overlay when it has the 'hidden' class */
+    .overlay.hidden {
+      display: none;
+    }
   </style>
 </head>
+
 <body>
   <div class="logo">
     <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" width="169.152" height="39.529"
-      viewBox="0 0 169.152 39.529"
-      onclick="returnToLanding()"
-      >
+      viewBox="0 0 169.152 39.529" onclick="returnToLanding()">
       <title>CAL-H-RGB</title>
       <g>
         <path
@@ -156,11 +242,25 @@
     </div>
   </div>
 
+  <div id="nameOverlay" class="overlay">
+    <div class="overlay-content">
+      <h1>Welcome to the Connections Game!</h1>
+      <form id="nameForm">
+        <label for="playerName">Please enter your name to start playing:</label>
+        <input type="text" id="playerName" name="playerName" placeholder="Your name here" required maxlength="30"
+          autofocus>
+        <button type="submit">Start Game</button>
+      </form>
+      <i style="font-size: 11pt;">Your results will be submitted automatically after finishing the game.</i>
+    </div>
+  </div>
+
   <div id="game" class="container hidden">
     <h1 id="page-title">🧩 Connections Game 🧩</h1>
     <h2 id="game-title"></h2>
     <div id="instructions">
-      <p>Create four groups of four! > Select four words that you think form a group, click "Submit" to check, and repeat until all groups are found.</p>
+      <p>Create four groups of four! > Select four words that you think form a group, click "Submit" to check, and
+        repeat until all groups are found.</p>
     </div>
     <div id="grid" class="grid"></div>
     <div class="button-row">
@@ -172,6 +272,20 @@
   </div>
 
   <script>
+    let playerName = '';
+
+    // Handle form submission
+    document.getElementById('nameForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      // Get the player's name
+      playerName = document.getElementById('playerName').value.trim();
+
+      if (playerName) {
+        // Hide the overlay
+        document.getElementById('nameOverlay').classList.add('hidden');
+      }
+    });
     const simpleGames = [
       {
         groups: [
@@ -400,27 +514,20 @@
 
       if (foundCategories.size === 4) {
         document.getElementById("result").textContent = `You solved the puzzle at ${getCSTTimestamp()}! 🎉`;
-        // Requesting the user to submit their result after finding a category
-        setTimeout(function () {
-          let person = prompt(`🎉 You solved the puzzle! Please enter your name for the submission.`);
-          if (person != null) {
-            let response = submitResult(person, Array.from(foundCategories).join(", ") );
-            alert("Your result was submitted.");
-          }
-        }, 500);
+        let response = submitResult(Array.from("Groups found: " + foundCategories).join(", "));
       } else if (mistakes >= maxMistakes) {
         document.getElementById("result").textContent = `Game over. Try again! 😢`;
       }
     };
 
-    function submitResult(name, category) {
+    function submitResult(category) {
       console.log("function: submitResult invoked");
       // Define the URL to which you want to send the POST request
       const url = 'https://default7b81ccc5ba354bf8854f49f9c02d3f.b1.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/05/workflows/647072a10fb5441d9c954b3ba73e18c8/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=FhNZUqtI7aUErCTBiI3vjWNOlUMeZTDdBjiY4QE5KQg';
 
       // Define the data you want to send in the POST request
       const data = {
-        name: name,
+        name: playerName,
         category: category,
         game: "Connections Puzzle"
       };
@@ -464,4 +571,5 @@
 
   </script>
 </body>
+
 </html>

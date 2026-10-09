@@ -724,7 +724,7 @@
         function togglePause() { if (answered) return; paused = !paused; document.getElementById('pauseOverlay').classList.toggle('show', paused); document.getElementById('pauseBtn').textContent = paused ? 'Resume Round' : 'Pause for Review' }
         function submitAnswer(choice) { if (answered) return; clearInterval(roundTimer); answered = true; paused = false; document.getElementById('pauseOverlay').classList.remove('show'); document.getElementById('pauseBtn').disabled = true; const r = gameRounds[current]; const timedOut = choice === '__TIMEOUT__'; const isCorrect = choice === r.answer; if (isCorrect) { score++; correct++; beep(880, .08); setTimeout(() => beep(1175, .08), 90) } else { beep(260, .15, 'sawtooth') } const box = document.getElementById('resultBox'); box.className = 'result ' + (isCorrect ? 'correct' : 'incorrect'); box.innerHTML = `<h3>${timedOut ? 'Time Expired!' : (isCorrect ? 'Correct!' : 'Not quite.')}</h3><p><strong>Answer:</strong> ${r.answer}</p><p><strong>What to look for:</strong></p><ul>${r.clues.map(c => `<li>${c}</li>`).join('')}</ul><p class="small"><strong>Compliance connection:</strong> Verify before you trust.</p>`; document.getElementById('scoreNum').textContent = score; document.getElementById('correctNum').textContent = correct; document.getElementById('choiceButtons').style.display = 'none'; document.getElementById('nextBtn').classList.remove('hidden'); document.getElementById('progressFill').style.width = ((current + 1) / gameRounds.length * 100) + '%' }
         function nextRound() { if (current < gameRounds.length - 1) { current++; loadRound() } else { endGame() } }
-        function endGame() { document.getElementById('gameScreen').classList.add('hidden'); document.getElementById('endScreen').classList.remove('hidden'); const pct = Math.round(correct / gameRounds.length * 100); document.getElementById('finalScore').textContent = score + '/' + gameRounds.length; document.getElementById('finalPercent').textContent = pct + '%'; document.getElementById('finalCorrect').textContent = correct; document.getElementById('finalDifficulty').textContent = selectedDifficulty.toUpperCase(); document.getElementById('finalRounds').textContent = gameRounds.length; document.getElementById('certName').textContent = playerName; document.getElementById('certScore').textContent = score + '/' + gameRounds.length + ' (' + pct + '%)'; document.getElementById('certDate').textContent = new Date().toLocaleDateString(); document.getElementById('finalMessage').textContent = pct >= 85 ? 'Excellent work. You are a Reality Detective Champion.' : pct >= 65 ? 'Nice job. Keep practicing the verification mindset.' : 'Good effort. Pause, inspect, and verify before relying on visual information.'; saveLocal(); prepareTeamsMessage(); /*renderLeaderboard()*/ }
+        function endGame() { document.getElementById('gameScreen').classList.add('hidden'); document.getElementById('endScreen').classList.remove('hidden'); const pct = Math.round(correct / gameRounds.length * 100); document.getElementById('finalScore').textContent = score + '/' + gameRounds.length; document.getElementById('finalPercent').textContent = pct + '%'; document.getElementById('finalCorrect').textContent = correct; document.getElementById('finalDifficulty').textContent = selectedDifficulty.toUpperCase(); document.getElementById('finalRounds').textContent = gameRounds.length; document.getElementById('certName').textContent = playerName; document.getElementById('certScore').textContent = score + '/' + gameRounds.length + ' (' + pct + '%)'; document.getElementById('certDate').textContent = new Date().toLocaleDateString(); document.getElementById('finalMessage').textContent = pct >= 85 ? 'Excellent work. You are a Reality Detective Champion.' : pct >= 65 ? 'Nice job. Keep practicing the verification mindset.' : 'Good effort. Pause, inspect, and verify before relying on visual information.'; submitResult(score + '/' + gameRounds.length + ' (' + pct + '%)'); /*saveLocal(); prepareTeamsMessage(); renderLeaderboard()*/ }
         function saveLocal() { const pct = Math.round(correct / gameRounds.length * 100); const entry = { name: playerName, difficulty: selectedDifficulty, score, total: gameRounds.length, pct, date: new Date().toLocaleString() }; const board = JSON.parse(localStorage.getItem('pinnacleRealAiLeaderboard') || '[]'); board.push(entry); board.sort((a, b) => b.pct - a.pct || b.score - a.score); localStorage.setItem('pinnacleRealAiLeaderboard', JSON.stringify(board.slice(0, 50))) }
         function renderLeaderboard() { const board = JSON.parse(localStorage.getItem('pinnacleRealAiLeaderboard') || '[]'); document.getElementById('leaderboardBody').innerHTML = board.length ? board.map((e, i) => `<tr><td>${i + 1}</td><td>${escapeHtml(e.name)}</td><td>${e.difficulty}</td><td>${e.score}/${e.total}</td><td>${e.pct}%</td><td>${e.date}</td></tr>`).join('') : '<tr><td colspan="6">No scores saved yet.</td></tr>'; document.getElementById('teamsWebhook').value = localStorage.getItem('teamsWebhook') || '' }
         function prepareTeamsMessage() { const pct = Math.round(correct / gameRounds.length * 100); document.getElementById('teamsPreview').value = `Real vs. AI score: ${playerName} completed ${selectedDifficulty.toUpperCase()} with ${score}/${gameRounds.length} (${pct}%). Transparency Builds TRUST.` }
@@ -739,6 +739,48 @@
         function restartCurrentGame() { clearInterval(roundTimer); current = 0; score = 0; correct = 0; answered = false; paused = false; if (gameRounds.length === 0) { gameRounds = buildRounds(selectedDifficulty) }; document.getElementById('pauseOverlay').classList.remove('show'); loadRound() }
         function openHelp() { document.getElementById('helpModal').classList.add('show') }
         function closeHelp() { document.getElementById('helpModal').classList.remove('show') }
+        function submitResult(result) {
+            console.log("function: submitResult invoked");
+            // Define the URL to which you want to send the POST request
+            const url = 'https://default7b81ccc5ba354bf8854f49f9c02d3f.b1.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/05/workflows/647072a10fb5441d9c954b3ba73e18c8/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=FhNZUqtI7aUErCTBiI3vjWNOlUMeZTDdBjiY4QE5KQg';
+
+            // Define the data you want to send in the POST request
+            const data = {
+                name: playerName,
+                category: result,
+                game: "Real vs. AI"
+            };
+
+            // Convert the data to a JSON string
+            const jsonData = JSON.stringify(data);
+
+            // Set the headers for the request
+            const headers = {
+                'Content-Type': 'application/json'
+            };
+
+            // Make the POST request using fetch
+            fetch(url, {
+                method: 'POST', // Specify the HTTP method
+                headers: headers, // Include the headers
+                body: jsonData // Include the data to be sent
+            })
+                .then(response => {
+                    // Check if the request was successful
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok ' + response.statusText);
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    // Handle the response data
+                    console.log('Success:', data);
+                })
+                .catch(error => {
+                    // Handle any errors that occurred during the request
+                    console.error('Error:', error);
+                });
+        };
         document.addEventListener('keydown', e => { if (e.key === 'Escape') closeHelp() });
         document.addEventListener('click', e => { if (e.target === document.getElementById('helpModal')) closeHelp() });
     </script>
