@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wordle Game</title>
+    <style>
+         :root {
+            --red: #df2b2a;
+            --red-accent: #b52221;
+        }
+        
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #df2b2a 0%, #a01f1e 100%);
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #df2b2a;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .info {
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 0.9em;
+        }
+
+        .game-board {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+            justify-content: center;
+        }
+
+        .row {
+            display: contents;
+        }
+
+        .tile {
+            width: 50px;
+            height: 50px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1.5em;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-transform: uppercase;
+            background: white;
+            transition: all 0.3s ease;
+        }
+
+        .tile.filled {
+            border-color: #999;
+            background: #f0f0f0;
+        }
+
+        .tile.correct {
+            background: #6aaa64;
+            color: white;
+            border-color: #6aaa64;
+        }
+
+        .tile.present {
+            background: #c9b458;
+            color: white;
+            border-color: #c9b458;
+        }
+
+        .tile.absent {
+            background: #787c7e;
+            color: white;
+            border-color: #787c7e;
+        }
+
+        .input-section {
+            margin-bottom: 20px;
+        }
+
+        #guessInput {
+            padding: 12px;
+            font-size: 1.1em;
+            
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            text-align: center;
+            max-width: 300px;
+        }
+
+        #guessInput {
+            text-transform: uppercase;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #df2b2a;
+            box-shadow: 0 0 5px rgba(223, 43, 42, 0.5);
+        }
+
+        .buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 1em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            font-weight: bold;
+        }
+
+        .submit-btn {
+            background: #df2b2a;
+            color: white;
+            min-width: 100px;
+        }
+
+        .submit-btn:hover {
+            background: #c41f1f;
+        }
+
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .reset-btn {
+            background: #a01f1e;
+            color: white;
+            min-width: 100px;
+        }
+
+        .reset-btn:hover {
+            background: #7a1817;
+        }
+
+        .message {
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            min-height: 30px;
+        }
+
+        .message.win {
+            color: #6aaa64;
+        }
+
+        .message.lose {
+            color: #df2b2a;
+        }
+
+        .message.error {
+            color: #f0ad4e;
+        }
+
+        .stats {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .overlay-content {
+            background-color: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            color: #333;
+        }
+
+        .overlay-content h1 {
+            margin-top: 0;
+            margin-bottom: 30px;
+        }
+
+        #nameForm {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 1em;
+        }
+
+        #nameForm label {
+            font-size: 16px;
+            color: #555;
+            font-weight: 600;
+        }
+
+        #nameForm input {
+            padding: 12px;
+            font-size: 16px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            transition: border-color 0.3s;
+        }
+
+        #nameForm input:focus {
+            outline: none;
+            border-color: var(--red);
+            box-shadow: 0 0 5px var(--red-accent);
+        }
+
+        #nameForm button {
+            padding: 12px 20px;
+            font-size: 16px;
+            background-color: var(--red);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        #nameForm button:hover {
+            background-color: var(--red-accent);
+        }
+
+        #nameForm button:active {
+            transform: scale(0.98);
+        }
+
+        /* Hide overlay when it has the 'hidden' class */
+        .overlay.hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="nameOverlay" class="overlay">
+        <div class="overlay-content">
+            <h1>Welcome to Ethics Wordle!</h1>
+            <form id="nameForm">
+                <label for="playerName">Please enter your name to start playing:</label>
+                <input type="text" id="playerName" name="playerName" placeholder="Your name here" required
+                    maxlength="30" autofocus>
+                <button type="submit">Start Game</button>
+            </form>
+            <i style="font-size: 11pt;">Your results will be submitted automatically after finishing the game.</i>
+        </div>
+    </div>
+    <div class="container">
+        <div class="logo">
+            <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" width="169.152" height="39.529"
+                viewBox="0 0 169.152 39.529" onclick="returnToLanding()">
+                <title>CAL-H-RGB</title>
+                <g>
+                    <path
+                        d="M61.1,7.345A11.925,11.925,0,0,0,48.945,19.534,11.926,11.926,0,0,0,61.1,31.723a12.618,12.618,0,0,0,9.664-4.176L67.4,24.18a8.326,8.326,0,0,1-6.3,2.627c-3.973,0-6.767-3.233-6.767-7.273s2.794-7.273,6.767-7.273a7.822,7.822,0,0,1,5.893,2.39l3.536-3.535A12.487,12.487,0,0,0,61.1,7.345m26.264.235H82.448L72.414,31.319h5.32l1.852-4.479h10.64l1.852,4.479H97.4L87.364,7.58Zm72.191.169H148.78v23.57h5.186V12.53h5.185c2.424,0,4.041,1.145,4.041,3.434s-1.617,3.435-4.041,3.435h-2.357V24.18l2.424,2.593c4.176,4.445,5.859,4.815,8.688,4.815a7.9,7.9,0,0,0,1.246-.068V27.076a3.632,3.632,0,0,1-.438.034c-1.616,0-3.031-.741-5.287-3l-.909-.909a7.3,7.3,0,0,0,5.927-7.374c0-5.32-3.907-8.081-8.89-8.081m-53.167,0H101.2v23.57H118.14V26.47H106.388V7.749ZM81.438,22.261l3.468-8.451,3.468,8.451Zm50.473,4.546a6.964,6.964,0,0,1-6.936-7.273,6.944,6.944,0,1,1,13.872,0,6.925,6.925,0,0,1-6.936,7.273m0-19.462a12.07,12.07,0,0,0-12.256,12.189,12.256,12.256,0,0,0,24.512,0A12.07,12.07,0,0,0,131.911,7.345" />
+                    <path
+                        d="M39.611,19.724A19.8,19.8,0,0,0,29.117,2.246V8.132a14.851,14.851,0,1,1-18.623.056V2.246A19.8,19.8,0,1,0,39.611,19.724Zm-8.2,0a11.52,11.52,0,0,0-4.339-9.014,2.905,2.905,0,0,1-1.2-2.367V.871A19.682,19.682,0,0,0,21.5,0V8.291h0v2.4a3.678,3.678,0,0,0,1.541,3.3,6.6,6.6,0,1,1-6.474,0A3.649,3.649,0,0,0,18.184,10.7V0a19.681,19.681,0,0,0-4.365.844v7.5A2.93,2.93,0,0,1,12.6,10.721a11.56,11.56,0,1,0,18.806,9Z"
+                        fill="#ec1e26" />
+                </g>
+            </svg>
+        </div>
+        <h1>🎮 Ethics Wordle</h1>
+        <div class="info">Guess the 5-letter word in 6 tries</div>
+
+        <div class="message" id="message"></div>
+
+        <div class="game-board" id="gameBoard"></div>
+
+        <div class="input-section">
+            <input type="text" id="guessInput" placeholder="Enter 5-letter word" maxlength="5" autocomplete="off">
+        </div>
+
+        <div class="buttons">
+            <button class="submit-btn" id="submitBtn">Submit</button>
+            <button class="reset-btn" id="resetBtn">New Game</button>
+        </div>
+
+        <div class="stats">
+            <div>Attempts: <span id="attempts">0</span> / 6</div>
+            <div id="wordDisplay" class="hidden">The word was: <strong id="wordText"></strong></div>
+        </div>
+    </div>
+
+    <script>
+        // ===== CONFIGURATION =====
+        // Change this word to play with a different target word
+        const WORD = "BRIBE";
+        const MAX_ATTEMPTS = 6;
+        const WORD_LENGTH = 5;
+
+        // ===== STATE =====
+        let guesses = [];
+        let gameOver = false;
+        let won = false;
+
+        // ===== DOM ELEMENTS =====
+        const gameBoard = document.getElementById("gameBoard");
+        const guessInput = document.getElementById("guessInput");
+        const submitBtn = document.getElementById("submitBtn");
+        const resetBtn = document.getElementById("resetBtn");
+        const messageEl = document.getElementById("message");
+        const attemptsEl = document.getElementById("attempts");
+        const wordDisplay = document.getElementById("wordDisplay");
+        const wordText = document.getElementById("wordText");
+
+        let playerName = '';
+
+        // Handle form submission
+        document.getElementById('nameForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            // Get the player's name
+            playerName = document.getElementById('playerName').value.trim();
+
+            if (playerName) {
+                // Hide the overlay
+                document.getElementById('nameOverlay').classList.add('hidden');
+            }
+        });
+
+        // ===== INITIALIZATION =====
+        initializeGame();
+
+        // ===== EVENT LISTENERS =====
+        submitBtn.addEventListener("click", submitGuess);
+        resetBtn.addEventListener("click", resetGame);
+        guessInput.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") submitGuess();
+        });
+
+        // ===== GAME FUNCTIONS =====
+        function initializeGame() {
+            renderBoard();
+            guessInput.focus();
+        }
+
+        function renderBoard() {
+            gameBoard.innerHTML = "";
+            for (let i = 0; i < MAX_ATTEMPTS; i++) {
+                const row = document.createElement("div");
+                row.className = "row";
+                for (let j = 0; j < WORD_LENGTH; j++) {
+                    const tile = document.createElement("div");
+                    tile.className = "tile";
+                    const guess = guesses[i];
+                    if (guess) {
+                        const letter = guess[j];
+                        const status = getLetterStatus(guess, j);
+                        tile.textContent = letter;
+                        tile.classList.add("filled", status);
+                    }
+                    row.appendChild(tile);
+                }
+                gameBoard.appendChild(row);
+            }
+        }
+
+        function getLetterStatus(guess, index) {
+            const letter = guess[index];
+            if (WORD[index] === letter) return "correct";
+            if (WORD.includes(letter)) return "present";
+            return "absent";
+        }
+
+        function submitGuess() {
+            const guess = guessInput.value.trim().toUpperCase();
+            messageEl.textContent = "";
+            messageEl.className = "message";
+
+            // Validation
+            if (guess.length !== WORD_LENGTH) {
+                messageEl.textContent = `Enter a ${WORD_LENGTH}-letter word!`;
+                messageEl.classList.add("error");
+                return;
+            }
+
+            if (!/^[A-Z]+$/.test(guess)) {
+                messageEl.textContent = "Use only letters!";
+                messageEl.classList.add("error");
+                return;
+            }
+
+            if (guesses.includes(guess)) {
+                messageEl.textContent = "You already guessed that!";
+                messageEl.classList.add("error");
+                return;
+            }
+
+            // Add guess
+            guesses.push(guess);
+            guessInput.value = "";
+            attemptsEl.textContent = guesses.length;
+
+            // Check win/lose
+            if (guess === WORD) {
+                won = true;
+                gameOver = true;
+                messageEl.textContent = `🎉 You won in ${guesses.length} ${guesses.length === 1 ? "try" : "tries"}!`;
+                messageEl.classList.add("win");
+                let response = submitResult(`🎉 ${playerName} guessed the word '${WORD}' in ${guesses.length} ${guesses.length === 1 ? "try" : "tries"}!`);
+            } else if (guesses.length >= MAX_ATTEMPTS) {
+                gameOver = true;
+                messageEl.textContent = "Game Over! You lost.";
+                messageEl.classList.add("lose");
+                wordDisplay.classList.remove("hidden");
+                wordText.textContent = WORD;
+            }
+
+            // Render and handle end state
+            renderBoard();
+            if (gameOver) {
+                guessInput.disabled = true;
+                submitBtn.disabled = true;
+            } else {
+                guessInput.focus();
+            }
+        }
+
+        function resetGame() {
+            guesses = [];
+            gameOver = false;
+            won = false;
+            guessInput.value = "";
+            guessInput.disabled = false;
+            submitBtn.disabled = false;
+            messageEl.textContent = "";
+            messageEl.className = "message";
+            attemptsEl.textContent = "0";
+            wordDisplay.classList.add("hidden");
+            renderBoard();
+            guessInput.focus();
+        }
+
+        function submitResult(result) {
+            console.log("function: submitResult invoked");
+            // Define the URL to which you want to send the POST request
+            const url = 'https://default7b81ccc5ba354bf8854f49f9c02d3f.b1.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/05/workflows/647072a10fb5441d9c954b3ba73e18c8/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=FhNZUqtI7aUErCTBiI3vjWNOlUMeZTDdBjiY4QE5KQg';
+
+            // Define the data you want to send in the POST request
+            const data = {
+                name: playerName,
+                category: result,
+                game: "Ethics Wordle"
+            };
+
+            // Convert the data to a JSON string
+            const jsonData = JSON.stringify(data);
+
+            // Set the headers for the request
+            const headers = {
+                'Content-Type': 'application/json'
+            };
+
+            // Make the POST request using fetch
+            fetch(url, {
+                method: 'POST', // Specify the HTTP method
+                headers: headers, // Include the headers
+                body: jsonData // Include the data to be sent
+            })
+                .then(response => {
+                    // Check if the request was successful
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok ' + response.statusText);
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    // Handle the response data
+                    console.log('Success:', data);
+                })
+                .catch(error => {
+                    // Handle any errors that occurred during the request
+                    console.error('Error:', error);
+                });
+        };
+    </script>
+</body>
+
+</html>
