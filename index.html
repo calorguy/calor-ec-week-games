@@ -1,33 +1,283 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Calor Ethics & Compliance Games</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calor | Ethics & Compliance Games</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #df2b2a 0%, #b91c1c 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+            color: white;
+            animation: fadeIn 0.8s ease-in;
+        }
+
+        header h1 {
+            font-size: 3em;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.95;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            max-width: 260px;
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .game-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        .game-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .game-card-header {
+            padding: 30px 25px;
+            color: white;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .game-card:nth-child(1) .game-card-header {
+            background: linear-gradient(135deg, #df2b2a 0%, #b91c1c 100%);
+        }
+
+        .game-card:nth-child(2) .game-card-header {
+            background: linear-gradient(135deg, #df2b2a 0%, #c92a2a 100%);
+        }
+
+        .game-card:nth-child(3) .game-card-header {
+            background: linear-gradient(135deg, #e84343 0%, #df2b2a 100%);
+        }
+
+        .game-card:nth-child(4) .game-card-header {
+            background: linear-gradient(135deg, #df2b2a 0%, #a91d1d 100%);
+        }
+
+        .game-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .game-card-header h2 {
+            font-size: 1.8em;
+            margin-bottom: 5px;
+        }
+
+        .game-card-body {
+            padding: 25px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .game-description {
+            color: #555;
+            font-size: 0.95em;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+
+        .game-difficulty {
+            display: inline-block;
+            background: #f0f0f0;
+            color: #df2b2a;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .play-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #df2b2a 0%, #b91c1c 100%);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        .play-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(223, 43, 42, 0.4);
+        }
+
+        .game-card:nth-child(2) .play-button:hover {
+            box-shadow: 0 5px 15px rgba(223, 43, 42, 0.4);
+        }
+
+        .game-card:nth-child(3) .play-button:hover {
+            box-shadow: 0 5px 15px rgba(223, 43, 42, 0.4);
+        }
+
+        .game-card:nth-child(4) .play-button:hover {
+            box-shadow: 0 5px 15px rgba(223, 43, 42, 0.4);
+        }
+
+        footer {
+            text-align: center;
+            color: white;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            opacity: 0.8;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2em;
+            }
+
+            .games-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .game-card-header {
+                padding: 25px 20px;
+            }
+
+            .game-card-body {
+                padding: 20px;
+            }
+        }
+    </style>
 </head>
-
 <body>
+    <div class="container">
+        <header>
+          <img src="https://cdn.calorgas.ie/-/media/sites/ireland/logos/calor-logo.svg?rev=102456b68ead4843949a973e23260dc9&h=34&w=146&la=en-IE&hash=E7AF732F2BCE705AE993FAF6F186F18B"
+                class="logo" alt="Calor">
+            <h1>Ethics & Compliance Games</h1>
+            <p>Engage with interactive games designed to strengthen your understanding of ethical practices and compliance standards.</p>
+        </header>
 
-  <p>There are no games available today. Check back tomorrow!</p>
+        <div class="games-grid">
+            <!-- Game 1: Connections -->
+            <div class="game-card">
+                <div class="game-card-header">
+                    <div class="game-icon">🔗</div>
+                    <h2>Connections</h2>
+                </div>
+                <div class="game-card-body">
+                    <span class="game-difficulty">Medium</span>
+                    <p class="game-description">Find four groups of four words that share a common ethical theme or compliance principle. Test your ability to identify patterns and relationships in ethical decision-making.</p>
+                    <a href="https://calorguy.github.io/calor-ec-week-games/EC_Week_Connections.html" class="play-button">Play Now</a>
+                </div>
+            </div>
 
-  <script>
-    var today = new Date();
-    var dayOfWeek = today.getDay();
+            <!-- Game 2: Real vs AI Image Challenge -->
+            <div class="game-card">
+                <div class="game-card-header">
+                    <div class="game-icon">🎨</div>
+                    <h2>Real vs AI</h2>
+                </div>
+                <div class="game-card-body">
+                    <span class="game-difficulty">Hard</span>
+                    <p class="game-description">Distinguish between authentic images and AI-generated ones. Develop critical eye for spotting synthetic media—an essential skill in today's compliance landscape.</p>
+                    <a href="https://calorguy.github.io/calor-ec-week-games/EC_Week_real-v-ai-image-challenge.html" class="play-button">Play Now</a>
+                </div>
+            </div>
 
-    window.onload = function () {
-      if (dayOfWeek === 1) {
-        window.location.href = "./EC_Week_Connections.html";
-      }
-      else if (dayOfWeek === 2) {
-        window.location.href = "./EC_Week_Calor_Ethics_Millionaire.html";
-      }
-      else if (dayOfWeek === 4) {
-        window.location.href = "./EC_Week_real-v-ai-image-challenge.html";
-      }
-    };
+            <!-- Game 3: Ethics Wordle -->
+            <div class="game-card">
+                <div class="game-card-header">
+                    <div class="game-icon">📝</div>
+                    <h2>Ethics Wordle</h2>
+                </div>
+                <div class="game-card-body">
+                    <span class="game-difficulty">Easy</span>
+                    <p class="game-description">Guess the ethics and compliance-related word in six attempts. Each guess provides feedback to guide you toward the answer in this word-guessing challenge.</p>
+                    <a href="https://calorguy.github.io/calor-ec-week-games/EC_Week_Wordle.html" class="play-button">Play Now</a>
+                </div>
+            </div>
 
-  </script>
+            <!-- Game 4: Ethics Millionaire -->
+            <div class="game-card">
+                <div class="game-card-header">
+                    <div class="game-icon">💰</div>
+                    <h2>Ethics Millionaire</h2>
+                </div>
+                <div class="game-card-body">
+                    <span class="game-difficulty">Hard</span>
+                    <p class="game-description">Answer progressively challenging ethics and compliance questions to climb the prize ladder. Use your lifelines wisely to reach the top and earn the big prize.</p>
+                    <a href="https://calorguy.github.io/calor-ec-week-games/EC_Week_Calor_Ethics_Millionaire.html" class="play-button">Play Now</a>
+                </div>
+            </div>
+        </div>
+        
+    </div>
 </body>
-
 </html>
