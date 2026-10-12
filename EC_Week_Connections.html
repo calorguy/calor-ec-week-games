@@ -514,7 +514,7 @@
 
       if (foundCategories.size === 4) {
         document.getElementById("result").textContent = `You solved the puzzle at ${getCSTTimestamp()}! 🎉`;
-        let response = submitResult(Array.from("Groups found: " + foundCategories).join(", "));
+        let response = submitResult("Groups found: " + Array.from(foundCategories).join(", "));
       } else if (mistakes >= maxMistakes) {
         document.getElementById("result").textContent = `Game over. Try again! 😢`;
       }
