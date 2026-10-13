@@ -13,7 +13,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #df2b2a 0%, #b91c1c 100%);
+            background: radial-gradient(circle at top left, #df2b2a, #b91c1c 46%, rgb(90, 2, 2));
             min-height: 100vh;
             padding: 40px 20px;
         }
@@ -62,7 +62,6 @@
             overflow: hidden;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-            cursor: pointer;
             display: flex;
             flex-direction: column;
             animation: slideUp 0.6s ease-out;
@@ -78,7 +77,7 @@
             color: white;
             text-align: center;
             flex-shrink: 0;
-            background-color: transparent;
+            background-color: #df2b2a;
             height: 200px;
         }
 
