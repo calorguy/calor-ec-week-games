@@ -364,6 +364,8 @@
                 // Hide the overlay
                 document.getElementById('nameOverlay').classList.add('hidden');
             }
+            guessInput.focus();
+
         });
 
         // ===== INITIALIZATION =====
@@ -379,7 +381,6 @@
         // ===== GAME FUNCTIONS =====
         function initializeGame() {
             renderBoard();
-            guessInput.focus();
         }
 
         function renderBoard() {
