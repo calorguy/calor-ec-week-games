@@ -9,6 +9,10 @@
     :root {
       --red: #df2b2a;
       --red-accent: #b52221;
+      --amber: #e08a00;
+      --green: #6aaa64;
+      --grey: #787c7e;
+      --gold: #c9b458;
     }
 
     * {
@@ -23,7 +27,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      background: linear-gradient(135deg, #df2b2a 0%, #a01f1e 100%);
+      background: linear-gradient(135deg, var(--red) 0%, #a01f1e 100%);
     }
 
     .container {
@@ -35,7 +39,7 @@
     }
 
     h1 {
-      color: #df2b2a;
+      color: var(--red);
       margin-bottom: 6px;
     }
 
@@ -52,15 +56,15 @@
     }
 
     .message.win {
-      color: #6aaa64;
+      color: var(--green);
     }
 
     .message.lose {
-      color: #df2b2a;
+      color: var(--red);
     }
 
     .message.error {
-      color: #e08a00;
+      color: var(--amber);
     }
 
     /* 5 columns x 6 rows */
@@ -94,25 +98,25 @@
 
     .board input:focus {
       outline: none;
-      border-color: #df2b2a;
+      border-color: var(--red);
       box-shadow: 0 0 6px rgba(223, 43, 42, .5);
     }
 
     .board input.correct {
-      background: #6aaa64;
-      border-color: #6aaa64;
+      background: var(--green);
+      border-color: var(--green);
       color: #fff;
     }
 
     .board input.present {
-      background: #c9b458;
-      border-color: #c9b458;
+      background: var(--gold);
+      border-color: var(--gold);
       color: #fff;
     }
 
     .board input.absent {
-      background: #787c7e;
-      border-color: #787c7e;
+      background: var(--grey);
+      border-color: var(--grey);
       color: #fff;
     }
 
@@ -133,7 +137,7 @@
     }
 
     #submitBtn {
-      background: #df2b2a;
+      background: var(--red);
     }
 
     #submitBtn:hover {
@@ -238,6 +242,13 @@
     .overlay.hidden {
       display: none;
     }
+    .legend {
+      color: darkgrey;
+      font-size: 11pt;
+    }
+    .legend .icon {
+      font-size: 18pt;
+    }
   </style>
 </head>
 
@@ -276,6 +287,11 @@
       <button id="resetBtn">Restart</button>
     </div>
     <div class="answer" id="answer"></div>
+    <div class="legend">
+      <span class="icon" style="color: var(--grey)">■</span> Wrong letter
+      <span class="icon" style="color: var(--gold)">■</span> Wrong position
+      <span class="icon" style="color: var(--green)">■</span> Correct letter & position
+    </div>
   </div>
 
   <script>
